@@ -1,0 +1,36 @@
+#####CSS#####
+html -> content
+css -> appearance
+Js -> interactivity
+
+EX:
+<p> this is text <\p> with no styling it just shows up
+css = 
+    <selector> {
+        <key> : <value>;
+    }
+
+selectors 
+tags -> p
+class -> .foobar 
+    <p class="lead">this is text <\p>
+    <div class="lead boxed" id="myid"\>
+    .lead {
+        fontsize: 4rem;
+    }
+id -> #myid
+-more with selectors
+pseudo-classes
+<selector>:hover
+<selector>:active
+<selector>:visited0
+
+css reset
+beginning css file to override browser defaults
+
+responsive
+(max-width: 400px){
+    p{
+        color:green;
+    }
+}
