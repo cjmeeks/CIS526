@@ -1,0 +1,138 @@
+body{
+  margin: 0;
+}
+/*
+sky        #caebf2
+carbon     #A9A9A9
+watermelon #ff3b3f
+Neutral    #EFEFEF
+*/
+
+.container-grid {
+  display: grid;
+  grid-template-rows: 50px 6fr 1fr ;
+  grid-template-columns: 100%; 
+  grid-row-gap: 3px;
+  grid-column-gap: 1px;
+  width: 100%;
+  height: 100%;
+  background: rgba(169, 169, 169,.5);
+}
+
+.body-grid{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-column: 1;
+  grid-row: 2;
+  grid-row-gap: 3px;
+  grid-column-gap: 3px;
+  transition:all 0.3s ease;
+}
+
+#header{
+  text-align: center;
+  font-size: 24px;
+  background: #EFEFEF;
+  grid-column: span 3;
+}
+
+#body{
+  grid-column: span 3;
+  background: #A9A9A9;
+}
+
+#left{
+  margin: 5px;
+  border-radius: 10px; 
+  padding: 10px;
+  background: #caebf2;
+  transition:all 0.5s ease;
+}
+#middle{
+  margin: 5px;
+  border-radius: 10px; 
+  padding: 10px;
+  background: #caebf2;
+  transition:all 0.5s ease;
+}
+#right{
+  margin: 5px;
+  border-radius: 10px; 
+  padding: 10px;
+  background: #caebf2;
+  transition:all 0.5s ease;
+}
+#right:hover, #middle:hover, #left:hover
+{
+  box-shadow: inset 0 0 0 2px #ff3b3f;
+  -webkit-transform: scale(1.02);
+  -ms-transform: scale(1.02);
+  transform: scale(1.02);
+}
+
+
+
+.one-one{
+  grid-column: 1;
+  grid-row: 1;
+}
+.one-two{
+  grid-column: 1;
+  grid-row: 2;
+}
+.one-three{
+  grid-column: 1;
+  grid-row: 3;
+}
+.one-four{
+  grid-column: 1;
+  grid-row: 4;
+}
+.two-one{
+  grid-column: 2;
+  grid-row: 1;
+}
+.two-two{
+  grid-column: 2;
+  grid-row: 2;
+}
+.two-three{
+  grid-column: 2;
+  grid-row: 3;
+}
+.two-four{
+  grid-column: 2;
+  grid-row: 4;
+}
+.three-one{
+  grid-column: 3;
+  grid-row: 1;
+}
+.three-two{
+  grid-column: 3;
+  grid-row: 2;
+}
+.three-three{
+  grid-column: 3;
+  grid-row: 3;
+}
+.three-four{
+  grid-column: 3;
+  grid-row: 4;
+}
+.four-one{
+  grid-column: 4;
+  grid-row: 1;
+}
+.four-two{
+  grid-column: 4;
+  grid-row: 2;
+}
+.four-three{
+  grid-column: 4;
+  grid-row: 3;
+}
+.four-four{
+  grid-column: 4;
+  grid-row: 4;
+}
