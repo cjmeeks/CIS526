@@ -1,0 +1,6 @@
+Javascript
+
+interpreted not compiled
+
+functions are first class objects
+    -you can treat them as variables
