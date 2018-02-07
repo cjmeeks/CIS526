@@ -12,10 +12,6 @@ const qs = require('querystring');
 const url = require('url');
 const path = require('path');
 
-const cache = {}
-cache['openhouse.html'] = fs.readFileSync('public/openhouse.html');
-cache['openhouse.css'] = fs.readFileSync('public/openhouse.css');
-cache['openhouse.js'] = fs.readFileSync('public/openhouse.js');
 /**@function serveIndex
  *  serving the index
  * @param {http.ServerResponse} res - server response object 
@@ -28,13 +24,17 @@ function serveIndex(path,res){
             res.end("Server Error serving index: " + path);
         }
         console.log(files);
-        var html = "<p>Index of " + path + "</p>";
-        html += "<ul>";
-        html += files.map(function(item){
-                    return "<li><a href='" + path + '/' + item + "'>" + path + '/' + item + "</a></li>";
-                }).join("");
-        html += "</ul>";
-        res.end(html);
+        if(files.includes('index.html')){
+            getFile(path+"\\" + "index.html", res);
+        } else{
+            var html = "<p>Index of " + path + "</p>";
+            html += "<ul>";
+            html += files.map(function(item){
+                        return "<li><a href='" + item + "'>" + path +'/'+ item + "</a></li>";
+                    }).join("");
+            html += "</ul>";
+            res.end(html);
+        }
     });
 }
 /**@function handleRequest
@@ -45,17 +45,22 @@ function serveIndex(path,res){
 function handleRequest(req, res) {
   var uri = url.parse(req.url);
   var filePath = uri.path.slice(1);
-  if(isDir(filePath, res).isDirectory()){
-    serveIndex(filePath, res);
-  }else if(isDir(filePath, res).isFile()){
-    if(fs.existsSync(filePath)){
-      console.log('should not be here');
-      getFile(filePath, res);
+  if(filePath == "favicon.ico"){
+      res.end('favico');
+  } else{
+    var check = checkDir(filePath, res);
+    if(check.isDirectory()){
+        serveIndex(filePath, res);
+    }else if(check.isFile()){
+        if(fs.existsSync(filePath)){
+        getFile(filePath, res);
+        } 
     } else{
-      res.statusCode = 404;
-      res.end("File Not Found");
-    } 
+            res.statusCode = 404;
+            res.end("File Not Found");
+    }
   }
+  
 }
 /** @function getFile
  * this function gets the file specified and response to request accordingly
@@ -65,7 +70,7 @@ function handleRequest(req, res) {
 function getFile(filename, res){
     fs.readFile(filename, function(err, data){
         if(err){
-            console.error(err);
+            console.log(err);
             res.statusCode = 500;
             res.end("Server Error getting file");
             return;
@@ -77,17 +82,15 @@ function getFile(filename, res){
  * this function gets the file specified and response to request accordingly
  * @param {string} filename - name of file to read
  */
-function checkDir(name, res,callback){
-  fs.stat(namespace, function(err, stats){
+function checkDir(name, res){
+  return fs.statSync(name, function(err, stats){
       if(err){
-          console.error(err);
+          console.log(err);
           res.statusCode = 500;
           res.end("Server Error is directory");
-          return;
       }
-      else {
-        callback(err);
-      }
+      console.log(stats);
+      return stats;
   });
 }
 // Create the web server
