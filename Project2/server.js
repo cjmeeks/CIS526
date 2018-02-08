@@ -26,7 +26,7 @@ function serveIndex(path,res){
         }
         console.log(files);
         if(files.includes('index.html')){
-            getFile(path+"\\" + "index.html", res);
+            getFile(path.slice(1)+"/" + "index.html", res);
         } else{
             var html = "<p>Index of " + path + "</p>";
             html += "<ul>";
@@ -46,7 +46,7 @@ function serveIndex(path,res){
 function handleRequest(req, res) {
     var uri = url.parse(req.url);
     if(uri.path == "/favicon.ico"){
-        console.log('fav');
+        // console.log('fav');
         res.end('favico');
         return;
     } 
@@ -58,12 +58,12 @@ function handleRequest(req, res) {
     }
     var check = checkDir(filePath.slice(1), res);
     if(check.isDirectory()){
-        console.log("is a dir");
+        // console.log("is a dir");
         serveIndex(filePath, res);
     }else if(check.isFile()){
-        console.log("is a file");
+        // console.log("is a file");
         if(fs.existsSync(filePath.slice(1))){
-            console.log("file exists");
+            // console.log("file exists");
             getFile(filePath.slice(1), res);
         } else{
             res.statusCode = 404;
@@ -87,7 +87,8 @@ function getFile(filename, res){
             res.statusCode = 500;
             res.end("Server Error getting file");
         }
-        console.log("read file");
+        // console.log("read file");
+        var matches = filePath.match(/\.\w+/g);
         res.end(data);
     });
 }
@@ -96,7 +97,7 @@ function getFile(filename, res){
  * @param {string} filename - name of file to read
  */
 function checkDir(name, res){
-    console.log("checking dir: " +name);
+    // console.log("checking dir: " +name);
   return fs.statSync(name, function(err, stats){
       if(err){
           console.log(err);
