@@ -30,7 +30,7 @@ function serveIndex(path,res){
             var html = "<p>Index of " + path + "</p>";
             html += "<ul>";
             html += files.map(function(item){
-                        return "<li><a href='" + '/' + path +'/'+ item + "'>" + path +'/'+ item + "</a></li>";
+                        return "<li><a href='" + '/' + path +'/'+ item + "'>" +  item + "</a></li>";
                     }).join("");
             html += "</ul>";
             res.end(html);
@@ -79,7 +79,7 @@ function getFile(filename, res){
     });
 }
 /** @function checkDir
- * this function gets the file specified and response to request accordingly
+ * this function gets the stat object so that we can see whether the path is a file or a directory
  * @param {string} filename - name of file to read
  */
 function checkDir(name, res){
@@ -99,5 +99,4 @@ var server = http.createServer(handleRequest);
 // Start listening on port PORT
 server.listen(PORT, function(){
     console.log("Listening on port " + PORT);
-    // console.log(path.resolve(__dirname, 'test'));
 });
