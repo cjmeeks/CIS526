@@ -17,7 +17,8 @@ const path = require('path');
  * @param {http.ServerResponse} res - server response object 
  */
 function serveIndex(path,res){
-    fs.readdir(path,function(err, files){
+    console.log('serving');
+    fs.readdir(path.slice(1),function(err, files){
         if(err){
             console.error(err);
             res.statusCode = 500;
@@ -30,7 +31,7 @@ function serveIndex(path,res){
             var html = "<p>Index of " + path + "</p>";
             html += "<ul>";
             html += files.map(function(item){
-                        return "<li><a href='" + '/' + path +'/'+ item + "'>" +  item + "</a></li>";
+                    return "<li><a href='" +path.replace(/\/public/g, '')+'/'+ item + "'>" +  item + "</a></li>";
                     }).join("");
             html += "</ul>";
             res.end(html);
@@ -43,23 +44,35 @@ function serveIndex(path,res){
  * @param {http.ServerResponse} res - response object 
  */
 function handleRequest(req, res) {
-  var uri = url.parse(req.url);
-  var filePath = uri.path.slice(1);
-  if(filePath == "favicon.ico"){
-      res.end('favico');
-  } else{
-    var check = checkDir(filePath, res);
+    var uri = url.parse(req.url);
+    if(uri.path == "/favicon.ico"){
+        console.log('fav');
+        res.end('favico');
+        return;
+    } 
+    var filePath;
+    if(uri.path == "/"){
+        filePath = "/public";
+    }else{
+    filePath = "/public"+uri.path;
+    }
+    var check = checkDir(filePath.slice(1), res);
     if(check.isDirectory()){
+        console.log("is a dir");
         serveIndex(filePath, res);
     }else if(check.isFile()){
-        if(fs.existsSync(filePath)){
-        getFile(filePath, res);
-        } 
-    } else{
+        console.log("is a file");
+        if(fs.existsSync(filePath.slice(1))){
+            console.log("file exists");
+            getFile(filePath.slice(1), res);
+        } else{
             res.statusCode = 404;
             res.end("File Not Found");
+        }
+    } else{
+        res.statusCode = 404;
+        res.end("File Not Found");
     }
-  }
   
 }
 /** @function getFile
@@ -73,8 +86,8 @@ function getFile(filename, res){
             console.log(err);
             res.statusCode = 500;
             res.end("Server Error getting file");
-            return;
         }
+        console.log("read file");
         res.end(data);
     });
 }
@@ -83,6 +96,7 @@ function getFile(filename, res){
  * @param {string} filename - name of file to read
  */
 function checkDir(name, res){
+    console.log("checking dir: " +name);
   return fs.statSync(name, function(err, stats){
       if(err){
           console.log(err);
