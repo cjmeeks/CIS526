@@ -30,7 +30,7 @@ function serveIndex(path,res){
             var html = "<p>Index of " + path + "</p>";
             html += "<ul>";
             html += files.map(function(item){
-                        return "<li><a href='" + item + "'>" + path +'/'+ item + "</a></li>";
+                        return "<li><a href='" + '/' + path +'/'+ item + "'>" + path +'/'+ item + "</a></li>";
                     }).join("");
             html += "</ul>";
             res.end(html);
