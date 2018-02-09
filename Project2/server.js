@@ -25,14 +25,12 @@ const mimeTypes = {
  * @param {http.ServerResponse} res - server response object 
  */
 function serveIndex(path,res){
-    console.log('serving');
     fs.readdir(path.slice(1),function(err, files){
         if(err){
             console.error(err);
             res.statusCode = 500;
             res.end("Server Error serving index: " + path);
         }
-        console.log(files);
         if(files.includes('index.html')){
             getFile(path.slice(1)+"/" + "index.html", res);
         } else{
@@ -65,12 +63,9 @@ function handleRequest(req, res) {
     }
     var check = checkDir(filePath.slice(1), res);
     if(check.isDirectory()){
-        // console.log("is a dir");
         serveIndex(filePath, res);
     }else if(check.isFile()){
-        // console.log("is a file");
         if(fs.existsSync(filePath.slice(1))){
-            // console.log("file exists");
             getFile(filePath.slice(1), res);
         } else{
             res.statusCode = 404;
