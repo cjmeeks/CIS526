@@ -12,6 +12,14 @@ const qs = require('querystring');
 const url = require('url');
 const path = require('path');
 
+const mimeTypes = {
+    ".html" : "text/html",
+    ".css" : "text/css",
+    ".js" : "application/javascript",
+    ".ico" : "image/x-icon",
+    ".gif" : "image/gif"
+}
+
 /**@function serveIndex
  *  serving the index
  * @param {http.ServerResponse} res - server response object 
@@ -46,7 +54,6 @@ function serveIndex(path,res){
 function handleRequest(req, res) {
     var uri = url.parse(req.url);
     if(uri.path == "/favicon.ico"){
-        // console.log('fav');
         res.end('favico');
         return;
     } 
@@ -87,8 +94,13 @@ function getFile(filename, res){
             res.statusCode = 500;
             res.end("Server Error getting file");
         }
-        // console.log("read file");
-        var matches = filePath.match(/\.\w+/g);
+        var matches = filename.match(/\.\w+/g);
+        if(matches){
+            var content = mimeTypes[matches[0]];
+            if(content){
+                res.setHeader("Content-Type", content);
+            }
+        }
         res.end(data);
     });
 }
@@ -97,21 +109,17 @@ function getFile(filename, res){
  * @param {string} filename - name of file to read
  */
 function checkDir(name, res){
-    // console.log("checking dir: " +name);
   return fs.statSync(name, function(err, stats){
       if(err){
           console.log(err);
           res.statusCode = 500;
-          res.end("Server Error is directory");
+          res.end("Server Error");
       }
-      console.log(stats);
       return stats;
   });
 }
 // Create the web server
 var server = http.createServer(handleRequest);
-
-// Start listening on port PORT
 server.listen(PORT, function(){
     console.log("Listening on port " + PORT);
 });
